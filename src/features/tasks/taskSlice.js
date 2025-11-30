@@ -59,9 +59,14 @@ const tasks = createSlice({
     task: null,
     loading: false,
     error: null,
+    search: "", // 🔥 add this
   },
 
-  reducers: {},
+  reducers: {
+    setSearch(state, action) {
+      state.search = action.payload;
+    },
+  },
 
   extraReducers: (builder) => {
     builder
@@ -105,8 +110,27 @@ const tasks = createSlice({
       .addCase(deleteTask.rejected, (state, action) => {
         state.error = action.payload;
         state.loading = false;
+      })
+
+      //update task
+      .addCase(updateTask.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateTask.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedTask = action.payload.data;
+
+        state.tasks = state.tasks.map((task) =>
+          task._id === updatedTask._id ? updatedTask : task
+        );
+      })
+      .addCase(updateTask.rejected, (state, action) => {
+        state.error = action.payload;
+        state.loading = false;
       });
   },
 });
 
 export default tasks.reducer;
+export const { setSearch } = tasks.actions;

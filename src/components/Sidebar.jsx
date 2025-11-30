@@ -20,8 +20,6 @@ export default function Sidebar() {
   const navItems = [
     { to: "/all-tasks", label: "Tasks", icon: <Home size={18} /> },
     { to: "/create", label: "Create", icon: <BadgePlus size={18} /> },
-    { to: "/update", label: "Update", icon: <CircleFadingArrowUp size={18} /> },
-    { to: "/delete", label: "Delete", icon: <Trash size={18} /> },
   ];
 
   const handleLogout = async () => {
@@ -43,7 +41,7 @@ export default function Sidebar() {
 
         <h1 className="text-lg font-semibold">TaskFlow</h1>
 
-        <div className="w-[36px]" />
+        <div className="w-9" />
       </div>
 
       {/* Desktop Sidebar */}

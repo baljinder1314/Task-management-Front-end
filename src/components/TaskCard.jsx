@@ -1,52 +1,48 @@
 export default function TaskCard({ task, onDelete, onEdit }) {
+  const bgColors = {
+    high: "bg-red-300",
+    medium: "bg-blue-300",
+    low: "bg-green-300",
+  };
+
   return (
     <div
-      className="border rounded-xl p-4 shadow-sm hover:shadow-md transition bg-white 
-                    flex flex-col gap-3 sm:gap-4"
+      className={`rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer ${
+        bgColors[task.priority]
+      }`}
     >
-      {/* Title + Description */}
-      <div>
-        <h3 className="text-lg sm:text-xl font-semibold break-words">
-          {task.title}
-        </h3>
-        <p className="text-gray-600 text-sm sm:text-base break-words">
-          {task.description}
-        </p>
-      </div>
+      {/* ID */}
+      <p className="text-sm font-bold opacity-70">#{task._id.slice(-4)}</p>
+
+      {/* Title */}
+      <h3 className="text-lg font-semibold mt-2">{task.title}</h3>
+
+      {/* Description line */}
+      <p className="text-sm mt-1 opacity-80 truncate">{task.description}</p>
 
       {/* Time */}
-      <div className="text-purple-600 text-sm sm:text-base">
-        {task.start_time} - {task.end_time}
+      <div className="flex justify-between mt-4 items-center">
+        <span className="text-sm bg-white px-2 py-1 rounded-full shadow-sm flex items-center gap-1">
+          <span className="text-blue-700 text-xs">{task.priority}</span>
+        </span>
+
+        <span className="font-semibold text-gray-700">
+          {task.start_time} - {task.end_time}
+        </span>
       </div>
 
-      {/* Priority Badge */}
-      <span
-        className={`inline-block px-3 py-1 rounded-full text-white text-xs sm:text-sm w-fit
-        ${
-          task.priority === "high"
-            ? "bg-red-500"
-            : task.priority === "medium"
-            ? "bg-blue-500"
-            : "bg-green-500"
-        }`}
-      >
-        {task.priority}
-      </span>
-
-      {/* Buttons - responsive */}
-      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-2">
+      {/* Buttons */}
+      <div className="flex justify-between mt-4">
         <button
           onClick={() => onEdit(task)}
-          className="px-3 py-2 rounded bg-yellow-500 text-white text-sm sm:text-base
-                     w-full sm:w-auto"
+          className="bg-yellow-500 px-3 py-1 text-white rounded-lg text-sm shadow hover:bg-yellow-600"
         >
           Edit
         </button>
 
         <button
           onClick={() => onDelete(task._id)}
-          className="px-3 py-2 rounded bg-red-500 text-white text-sm sm:text-base
-                     w-full sm:w-auto"
+          className="bg-red-500 px-3 py-1 text-white rounded-lg text-sm shadow hover:bg-red-600"
         >
           Delete
         </button>

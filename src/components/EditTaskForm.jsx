@@ -1,57 +1,55 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createTask } from "../features/tasks/taskSlice";
-import { useNavigate } from "react-router-dom";
+import { updateTask } from "../features/tasks/taskSlice";
 
-export default function TaskForm() {
+export default function EditTaskForm({ task, onClose }) {
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.task);
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     start_time: "",
     end_time: "",
     priority: "low",
-    status: "pending", // 🔥 NEW FIELD
+    status: "pending",
   });
 
-  const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.task);
-  const navigate = useNavigate();
+  useEffect(() => {
+    if (task) {
+      setFormData({
+        title: task.title || "",
+        description: task.description || "",
+        start_time: task.start_time || "",
+        end_time: task.end_time || "",
+        priority: task.priority || "low",
+        status: task.status || "pending",
+      });
+    }
+  }, [task]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
-
-    const data = { ...formData };
-
-    const createData = await dispatch(createTask(data));
-
-    if (createTask.fulfilled.match(createData)) {
-      setFormData({
-        title: "",
-        description: "",
-        start_time: "",
-        end_time: "",
-        priority: "low",
-        status: "pending",
-      });
-
-      navigate("/all-tasks");
+    const response = await dispatch(
+      updateTask({ id: task._id, data: formData })
+    );
+    if (updateTask.fulfilled.match(response)) {
+      onClose(); // close modal
     }
   };
 
   return (
     <form
-      onSubmit={handleSubmit}
-      className="max-w-lg mx-auto bg-white shadow-lg p-6 rounded-xl space-y-4"
+      className="p-6 bg-white shadow-xl rounded-xl space-y-4 max-w-md mx-auto"
+      onSubmit={handleUpdate}
     >
-      <h2 className="text-2xl font-bold text-center mb-2">Create Task</h2>
+      <h2 className="text-2xl font-bold text-center">Edit Task</h2>
 
-      {/* 🔴 ERROR MESSAGE */}
-      {error && <p className="text-red-500 text-center">{error}</p>}
-
+      {/* Title */}
       <input
         type="text"
         name="title"
@@ -62,6 +60,7 @@ export default function TaskForm() {
         required
       />
 
+      {/* Description */}
       <textarea
         name="description"
         placeholder="Task Description"
@@ -71,6 +70,7 @@ export default function TaskForm() {
         rows={3}
       ></textarea>
 
+      {/* Time row */}
       <div className="flex gap-3">
         <input
           type="time"
@@ -80,7 +80,6 @@ export default function TaskForm() {
           className="w-1/2 border p-3 rounded-lg"
           required
         />
-
         <input
           type="time"
           name="end_time"
@@ -91,37 +90,35 @@ export default function TaskForm() {
         />
       </div>
 
-      {/* PRIORITY */}
+      {/* Priority */}
       <select
         name="priority"
         value={formData.priority}
         onChange={handleChange}
         className="w-full border p-3 rounded-lg"
-        required
       >
         <option value="low">Low Priority</option>
         <option value="medium">Medium Priority</option>
         <option value="high">High Priority</option>
       </select>
 
-      {/* 🔥 STATUS FIELD */}
+      {/* Status */}
       <select
         name="status"
         value={formData.status}
         onChange={handleChange}
         className="w-full border p-3 rounded-lg"
-        required
       >
         <option value="pending">Pending</option>
-        <option value="in-progress">In Progress</option>
         <option value="completed">Completed</option>
+        <option value="in-progress">In-progress</option>
       </select>
 
       <button
         type="submit"
         className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700"
       >
-        {loading ? "Loading...." : "Create Task"}
+        {loading ? "Updating... " : "Update Task"}
       </button>
     </form>
   );

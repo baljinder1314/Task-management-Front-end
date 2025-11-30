@@ -22,8 +22,12 @@ const getTasks = async () => {
 
 // Update Task
 const updateTask = async (id, data) => {
-  const res = await axios.put(`${API}/${id}`, data, { withCredentials: true });
-  return res.data.updatedTask;
+  const res = await axios.put(
+    `http://localhost:8000/api/v1/task/update-task/${id}`,
+    data,
+    { withCredentials: true }
+  );
+  return res.data;
 };
 
 // Delete Task

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = `http://localhost:8000`;
+const BASE_URL = `https://task-management-front-end.onrender.com`;
 
 // Create Task
 const createTask = async (taskData) => {
@@ -23,7 +23,7 @@ const getTasks = async () => {
 // Update Task
 const updateTask = async (id, data) => {
   const res = await axios.put(
-    `http://localhost:8000/api/v1/task/update-task/${id}`,
+    `${BASE_URL}/api/v1/task/update-task/${id}`,
     data,
     { withCredentials: true }
   );

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = `https://task-management-t5jz.onrender.com`;
+const BASE_URL = `http://localhost:3000`;
 
 // Create Task
 const createTask = async (taskData) => {

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const BASE_URL = `https://task-management-t5jz.onrender.com`;
+const BASE_URL = `http://localhost:3000`;
 
 export const registerUser = createAsyncThunk(
   "users/Register",
